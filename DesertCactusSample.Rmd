@@ -1,0 +1,145 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+```{r}
+#This is an exploratory data analysis I created for a class. The purpose of the data analysis was to see which group of majors in college has the highest median wage and lowest unemployment. I also explored the gender breakdown for each major group.
+
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+library(tidyr)
+library(tidyverse)
+```
+
+```{r}
+#First I had to load in the data file I'd be using. This data set was obtained from the website 538 and I got the csv file here: https://github.com/fivethirtyeight/data/tree/master/college-majors 
+
+data <- read.csv("recent-grads.csv")
+
+#Next, I had to filter my data set using the dplyr package in R. I used the filter() function to split up my Major_categories from the larger data set. 
+
+engineering <- filter(data,Major_category == "Engineering")
+
+business <- filter(data,Major_category == "Business")
+
+Physical_sciences <- filter(data,Major_category == "Physical Sciences")
+
+Law_and_Public_Policy	<- filter(data,Major_category == "Law & Public Policy")
+
+Computers_and_Mathematics	<- filter(data,Major_category == "Computers & Mathematics")
+
+Agriculture_and_Natural_Resources<- filter(data,Major_category == "Agriculture & Natural Resources")
+
+Industrial_Arts_and_Consumer_Services	<- filter(data,Major_category == "Industrial Arts & Consumer Services")
+
+Arts <- filter(data,Major_category == "Arts")
+
+Health <- filter(data,Major_category == "Health")
+
+Social_Science <- filter(data,Major_category == "Social Science")
+
+Biology_and_Life_Science<- filter(data,Major_category == "Biology & Life Science")
+
+Education<- filter(data,Major_category == "Education")
+
+Humanities_and_Liberal_Arts	<- filter(data,Major_category == "Humanities & Liberal Arts")
+
+Psychology_and_Social_Work<- filter(data,Major_category == "Psychology & Social Work")
+
+Communications_and_Journalism<- filter(data,Major_category == "Communications & Journalism")
+
+Interdisciplinary<- filter(data,Major_category == "Interdisciplinary")
+
+```
+```{r}
+#Next, I created a tribble with the information that I'd need to perform my calculations by combining all relevant data points into one massive tribble. This tribble includes the major group and it's median income, percentage of population that is male, and it's unemployment rate.
+
+databygroup<-tribble(
+  ~Major_Group, ~Median_Income, ~Percent_Male, ~Unemployment_Rate,
+  "Engineering",mean(engineering$Median),sum(engineering$Men)/sum(engineering$Total),mean(engineering$Unemployment_rate),
+
+  "Business",mean(business$Median),sum(business$Men)/sum(business$Total),mean(business$Unemployment_rate),
+"Physical Sciences",mean(Physical_sciences$Median),sum(Physical_sciences$Men)/sum(Physical_sciences$Total),mean(Physical_sciences$Unemployment_rate),
+"Law & Public Policy",mean(Law_and_Public_Policy$Median),sum(Law_and_Public_Policy$Men)/sum(Law_and_Public_Policy$Total),mean(Law_and_Public_Policy$Unemployment_rate),
+"Computers & Mathematics",mean(Computers_and_Mathematics$Median),sum(Computers_and_Mathematics$Men)/sum(Computers_and_Mathematics$Total),mean(Computers_and_Mathematics$Unemployment_rate),
+"Agriculture & Natural Resources",mean(Agriculture_and_Natural_Resources$Median),sum(Agriculture_and_Natural_Resources$Men,na.rm = TRUE)/sum(Agriculture_and_Natural_Resources$Total,na.rm = TRUE),mean(Agriculture_and_Natural_Resources$Unemployment_rate),
+"Industrial Arts & Consumer Services",mean(Industrial_Arts_and_Consumer_Services$Median),sum(Industrial_Arts_and_Consumer_Services$Men)/sum(Industrial_Arts_and_Consumer_Services$Total),mean(Industrial_Arts_and_Consumer_Services$Unemployment_rate),
+"Arts",mean(Arts$Median),sum(Arts$Men)/sum(Arts$Total),mean(Arts$Unemployment_rate),
+"Health",mean(Health$Median),sum(Health$Men)/sum(Health$Total),mean(Health$Unemployment_rate),
+"Social Science",mean(Social_Science$Median),sum(Social_Science$Men)/sum(Social_Science$Total),mean(Social_Science$Unemployment_rate),
+"Biology & Life Science",mean(Biology_and_Life_Science$Median),sum(Biology_and_Life_Science$Men)/sum(Biology_and_Life_Science$Total),mean(Biology_and_Life_Science$Unemployment_rate),
+"Education",mean(Education$Median),sum(Education$Men)/sum(Education$Total),mean(Education$Unemployment_rate),
+"Humanities & Liberal Arts",mean(Humanities_and_Liberal_Arts$Median),sum(Humanities_and_Liberal_Arts$Men)/sum(Humanities_and_Liberal_Arts$Total),mean(Humanities_and_Liberal_Arts$Unemployment_rate),
+"Psychology and Social Work",mean(Psychology_and_Social_Work$Median),sum(Psychology_and_Social_Work$Men)/sum(Psychology_and_Social_Work$Total),mean(Psychology_and_Social_Work$Unemployment_rate),
+"Communications & Journalism",mean(Communications_and_Journalism$Median),sum(Communications_and_Journalism$Men)/sum(Communications_and_Journalism$Total),mean(Communications_and_Journalism$Unemployment_rate),
+"Interdisciplinary",mean(Interdisciplinary$Median),sum(Interdisciplinary$Men)/sum(Interdisciplinary$Total),mean(Interdisciplinary$Unemployment_rate)
+) 
+
+databygroup
+```
+```{r}
+#Next, I was about to move on to plotting my charts, but then I realized it might be better to use the mutate() function to transmorm the percentages from Percent Male and Unemployment to full digit percentages rounded to the nearest hundreth. This would then make them nicer on a plot.
+
+newdatabygroup<-databygroup %>% mutate(
+  Percent_Male = round(Percent_Male*100, digits = 2),
+  Unemployment_Rate = round(Unemployment_Rate*100,digits = 2)
+)
+
+newdatabygroup
+```
+```{r}
+#With my new, nice round percentage numbers in hand, I was ready to plot. First, I created new variables for ease of inputting data into the ggplot function. Then, I made 3 barplots, one for median income, one for percentage of men, and one for unemployment rate
+
+Major_group<-newdatabygroup$Major_Group
+Median_Income<-newdatabygroup$Median_Income
+Percent_Male<-newdatabygroup$Unemployment_Rate
+Unemployment_Rate<-newdatabygroup$Unemployment_Rate
+
+
+gi <- ggplot(newdatabygroup, aes(Major_group,Median_Income))
+
+gi + geom_col(aes(fill=Major_group))+ theme(legend.position="bottom",legend.title = element_text(size = 6),
+          legend.text = element_text(size = 6), legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"),axis.text.x= element_text(size=0))+
+  labs(
+    title= "Median Income by Major Group",
+    x = "Major Group",
+    y = "Median Income ($)",fill = "Major Group"
+    )
+
+gm <- ggplot(newdatabygroup, aes(Major_group,Percent_Male))
+
+gm + geom_col(aes(fill=Major_group))+ theme(legend.position="bottom",legend.title = element_text(size = 6),
+          legend.text = element_text(size = 6), legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"),axis.text.x= element_text(size=0))+
+  labs(
+    title= "Percentage of Men in Major Group",
+    x = "Major Group",
+    y = "Percentage of Men (%)",fill = "Major Group"
+    )
+
+gu <- ggplot(newdatabygroup, aes(Major_group,Unemployment_Rate))
+
+gu + geom_col(aes(fill=Major_group))+ theme(legend.position="bottom",legend.title = element_text(size = 6),
+          legend.text = element_text(size = 6), legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"),axis.text.x= element_text(size=0))+
+  labs(
+    title= "Unemployment Rate by Major Group",
+    x = "Major Group",
+    y = "Unemployment Rate (%)",fill = "Major Group"
+    )
+
+
+```
+```{r}
+#After I had my plots I used the arrange() function in dplyr to arrange the data by my variables in order to more easily see which major group had the highest and lowest values. I also used pipes in Magrittr since I had no need to save these variables. This, along with the plot visualizations helped me see if my hypothesis was correct or not.
+
+newdatabygroup %>% arrange(newdatabygroup$Median_Income)
+newdatabygroup %>% arrange(newdatabygroup$Percent_Male)
+newdatabygroup %>% arrange(newdatabygroup$Unemployment_Rate)
+```
+```{r}
+#What does this all mean? It turns out that the engineering group of majors has the highest median income ($57382.76), as well as the highest percentage of males (75.95%). The honor of having the lowest unemployment rate goes to the physical sciences major group, with an unemployment rate of 4.65%. The engineering major group comes in 6th place with an unemployment rate of 6.33%. 
+```
+
