@@ -10,6 +10,4 @@ Desert-Cactus-Sample.pdf is a random project I created trying to show how I can 
 
 If you have any questions, please feel free to reach out.
 
-Best
-
 -Colin
