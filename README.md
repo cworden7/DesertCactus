@@ -8,5 +8,7 @@ Class-project-sample-college_majors&outcomes.pdf is a data analysis I did for cl
 Desert-Cactus-Sample.pdf is a random project I created trying to show how I can graph the sales of sku's over time to help identify trends. I made up the data I used for this and kept it pretty simple, but depending on what data Amazon provides to you in Excel, I could do something like this and perhaps more depending on what you'd like. I used the "datasample.csv" dataset to do this project.
 
 
-Enjoy!
+If you have any questions, please feel free to reach out.
+
+Best
 -Colin
