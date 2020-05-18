@@ -8,4 +8,4 @@ Class-project-sample-college_majors&outcomes.pdf is a data analysis I did for cl
 Desert-Cactus-Sample.pdf is a random project I created trying to show how I can graph the sales of sku's over time to identify trends. I made up the data I used for this, but depending on what data Amazon provides to you in Excel, I could do something like this and perhaps more depending on what you'd like.
 
 Enjoy!
-Colin
+-Colin
