@@ -1,9 +1,10 @@
 # DesertCactus
 Hi!
 
-The Html file is a ready to view version of the code so I'd recommend opening that. 
+If you'd like to view these files, follow these steps:
 
-If you'd like, I also attached the rmd file, which can be opened in Rstudio.
+1. Download the files by clicking the green "Clone or Download" button and then click "Download Zip".
+2. Choose file to open: The DesertCactusSample.html is a ready to view version of the work and shows complete graphs. It opens right in your browser and I'd recommend opening this file. The DesertCactusSample.rmd is an Rmarkdown document and can be opened in Rstudio where you can edit the code and see how the code executes.  
 
-The thing I'd like to draw focus to is the graphs, I can create those for any purpose, 
-such as analyzing product sales trends relatively easily depending on the data set Amazon provides and if that includes dates/months of sale.
+Enjoy!
+Colin
